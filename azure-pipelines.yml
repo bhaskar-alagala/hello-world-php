@@ -19,12 +19,7 @@ steps:
     sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
     sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
     sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
-- task: PublishCodeCoverageResults@2
-  inputs:
-    summaryFileLocation: '*'
-    pathToSources: '$(System.DefaultWorkingDirectory)/myapp'
-    php -version
-  displayName: 'Use PHP version $(phpVersion)'
+
 
 - script: composer install --no-interaction --prefer-dist
   displayName: 'composer install'
@@ -32,4 +27,10 @@ steps:
   inputs:
     SourceFolder: '$(agent.builddirectory)'
     Contents: '**/*.php'
-    TargetFolder: '$(build.artifactstagingdirectory)'
+    TargetFolder: '$(build.artifactstagingdirectory)' #
+- task: PublishCodeCoverageResults@2
+  inputs:
+    summaryFileLocation: '*'
+    pathToSources: '$(System.DefaultWorkingDirectory)/myapp'
+     #php -version
+  displayName: 'Use PHP version $(phpVersion)'
