@@ -1,66 +1,54 @@
-
+---
 trigger:
-- main
-
+  - main
 variables:
-  # Azure Resource Manager connection created during pipeline creation
-  #azureSubscription: 'subscription-id'
-  # Web app name
-  webAppName: 'my-php'
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
-  # Environment name
-  environmentName: 'azure-vm'
-  # Root folder under which your composer.json file is available.
+  webAppName: my-php
+  vmImageName: ubuntu-latest
+  environmentName: azure-vm
   rootFolder: $(System.DefaultWorkingDirectory)
-
 stages:
-- stage: Build
-  displayName: Build stage
-  variables:
-    phpVersion: '7.4'
-  jobs:
-  - job: BuildJob
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - script: |
-        sudo update-alternatives --set php /usr/bin/php$(phpVersion)
-        sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
-        sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
-        sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
-        sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
-        php -version
-      workingDirectory: $(rootFolder)
-      displayName: 'Use PHP version $(phpVersion)'
+  - stage: Build
+    displayName: Build stage
+    variables:
+      phpVersion: "7.4"
+    jobs:
+      - job: BuildJob
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - script: >
+              sudo update-alternatives --set php /usr/bin/php$(phpVersion)
 
-    - script: composer install --no-interaction --prefer-dist
-      workingDirectory: $(rootFolder)
-      displayName: 'Composer install'
+              sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
 
-    - task: ArchiveFiles@2
-      displayName: 'Archive files'
-      inputs:
-        rootFolderOrFile: '$(rootFolder)'
-        includeRootFolder: false
-        archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        replaceExistingArchive: true
+              sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
 
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      displayName: 'Upload package'
-      artifact: drop
+              sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
 
+              sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
 
-- stage: Deploy
-  displayName: 'Deploy on Azure VM'
-  jobs:  
-	- deployment: VMDeploy
-	  displayName: web
-	  environment:
-	    	name:  my-php
-		    resourceType: VirtualMachine
-		    tags: php-web
-	  
-
-
+              php -version
+            workingDirectory: $(rootFolder)
+            displayName: Use PHP version $(phpVersion)
+          - script: composer install --no-interaction --prefer-dist
+            workingDirectory: $(rootFolder)
+            displayName: Composer install
+          - task: ArchiveFiles@2
+            displayName: Archive files
+            inputs:
+              rootFolderOrFile: $(rootFolder)
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+              replaceExistingArchive: true
+          - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+            displayName: Upload package
+            artifact: drop
+  - stage: Deploy
+    displayName: Deploy on Azure VM
+    jobs:
+      display Name: web
+      environment: null
+      name: my-php
+      resource Type: VirtualMachine
+      tags: php-web
