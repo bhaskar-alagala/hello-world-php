@@ -19,6 +19,10 @@ steps:
     sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
     sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
     sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+- task: PublishCodeCoverageResults@2
+  inputs:
+    summaryFileLocation: '*'
+    pathToSources: '$(System.DefaultWorkingDirectory)/myapp'
     php -version
   displayName: 'Use PHP version $(phpVersion)'
 
@@ -29,8 +33,3 @@ steps:
     SourceFolder: '$(agent.builddirectory)'
     Contents: '**/*.php'
     TargetFolder: '$(build.artifactstagingdirectory)'
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
