@@ -47,7 +47,6 @@ stages:
   - stage: Deploy
     displayName: Deploy on Azure VM
     jobs:
-    - job: deployToVM
       environment: 
         name: my-php
         resourceType: VirtualMachine
