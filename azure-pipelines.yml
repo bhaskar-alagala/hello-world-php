@@ -27,10 +27,8 @@ steps:
   inputs:
     SourceFolder: '$(agent.builddirectory)'
     Contents: '**/*.php'
-    TargetFolder: '$(build.artifactstagingdirectory)' #
+    TargetFolder: '$(build.artifactstagingdirectory)'
 - task: PublishCodeCoverageResults@2
   inputs:
     summaryFileLocation: '*'
     pathToSources: '$(System.DefaultWorkingDirectory)/myapp'
-     #php -version
-  displayName: 'Use PHP version $(phpVersion)'
