@@ -31,7 +31,3 @@ steps:
     SourceFolder: '$(agent.builddirectory)'
     Contents: '**/*.php'
     TargetFolder: '$(build.artifactstagingdirectory)'
-- task: PublishCodeCoverageResults@2
-  inputs:
-    summaryFileLocation: '*.php'
-    pathToSources: '$(System.DefaultWorkingDirectory)/myapp'
