@@ -55,4 +55,7 @@ stages:
           - script: |
               sudo chmod 400 $(sshKey.secureFilePath)
               ssh -o StrictHostKeyChecking=no -i $(sshKey.secureFilePath) azureuser@20.187.65.253 "
-              sudo systemctl restart apache2 "
+              sudo systemctl restart apache2 
+              cd /var/www/myapp
+              sudo unzip -o /tmp/$(artifactName).zip -d .
+              sudo chown -R www-data:www-data ."
