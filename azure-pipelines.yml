@@ -44,11 +44,4 @@ stages:
           - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
             displayName: Upload package
             artifact: drop
-  - stage: Deploy
-    displayName: Deploy on Azure VM
-    jobs:
-      environment: 
-        name: my-php
-        resourceType: VirtualMachine
-        tags: 
-        - php-web
+
