@@ -63,10 +63,25 @@ stages:
           - task: CopyFilesOverSSH@0
             name: copy
             inputs:
-              sshEndpoint: 'ssh'
+              sshEndpoint: 'ssh'  # project settings --> service connection - create new -> select ssh and provide  server IP and key.pem file
               sourceFolder: '$(Build.ArtifactStagingDirectory)'
               #contents: '**/*.zip'
               targetFolder: '/var/www/myapp'
               cleanTargetFolder: true
               failOnEmptySource: true
-              
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              itemPattern: '**/*'
+              targetPath: '$(Pipeline.Workspace)'
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              buildType: 'specific'
+              project: 'be8e7b2f-ba9c-45cc-a31c-dde24678c3fe'
+              pipeline: '1'
+              specificBuildWithTriggering: true
+              buildVersionToDownload: 'latest'
+              tags: '$(Build.BuildId)'
+              downloadType: 'single'
+              downloadPath: '$(System.ArtifactsDirectory)'
+              cleanDestinationFolder: true
