@@ -46,4 +46,13 @@ stages:
           - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
             displayName: Upload package
             artifact: drop
-
+      - job: DeployProd
+          steps:
+          - task: DownloadSecureFile@1
+            name: sshKey
+            inputs:
+              secureFile: 'adodemo-key.pem'
+          - script: |
+              sudo chmod 400 $(sshKey.secureFilePath)
+              ssh -o StrictHostKeyChecking=no -i $(sshKey.secureFilePath) azureuser@20.187.65.253 "
+              sudo systemctl restart apache2 "
