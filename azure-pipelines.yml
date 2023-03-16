@@ -6,6 +6,8 @@ variables:
   vmImageName: ubuntu-latest
   environmentName: azure-vm
   rootFolder: $(System.DefaultWorkingDirectory)
+  TAG: '$(Build.BuildId)'
+  
 stages:
   - stage: Build
     displayName: Build stage
