@@ -59,3 +59,13 @@ stages:
               cd /var/www/myapp
               sudo unzip -o /tmp/$(artifactName).zip -d .
               sudo chown -R www-data:www-data ."
+          - task: AzureFileCopy@5
+            inputs:
+              azureSubscription: 'Pay-As-You-Go(3)(999f6377-d409-4084-8806-18bdd6c3db8a)'
+              Destination: 'AzureVMs'
+              resourceGroup: 'BHASKI-LAB'
+              MachineNames: 'bhaski-php'
+              vmsAdminUserName: 'azureuser'
+              vmsAdminPassword: '$(sshKey.secureFilePath)'
+              TargetPath: '/var/www/myapp'
+              CleanTargetBeforeCopy: true
