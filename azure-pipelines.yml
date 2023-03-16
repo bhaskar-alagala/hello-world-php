@@ -69,11 +69,7 @@ stages:
               targetFolder: '/var/www/myapp'
               cleanTargetFolder: true
               failOnEmptySource: true
-          - task: DownloadPipelineArtifact@2
-            inputs:
-              buildType: 'current'
-              itemPattern: '**/*'
-              targetPath: '$(Pipeline.Workspace)'
+ 
           - task: DownloadBuildArtifacts@1
             inputs:
               buildType: 'specific'
