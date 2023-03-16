@@ -48,36 +48,10 @@ stages:
             artifact: drop
       - job: DeployProd
         steps:
-          - task: DownloadSecureFile@1
-            name: sshKey
-            inputs:
-              secureFile: 'bhaski-php_key.pem'
-          - script: |
-              sudo chmod 400 $(sshKey.secureFilePath)
-              ssh -o StrictHostKeyChecking=no -i $(sshKey.secureFilePath) azureuser@20.187.65.253 "
-              sudo systemctl restart apache2 
-              cd /var/www/myapp
-              sudo unzip -o /tmp/$(artifactName).zip -d .
-              sudo chown -R www-data:www-data ."
-          
-          - task: CopyFilesOverSSH@0
-            name: copy
-            inputs:
-              sshEndpoint: 'ssh'  # project settings --> service connection - create new -> select ssh and provide  server IP and key.pem file
-              sourceFolder: '$(Build.ArtifactStagingDirectory)'
-              #contents: '**/*.zip'
-              targetFolder: '/var/www/myapp'
-              cleanTargetFolder: true
-              failOnEmptySource: true
- 
-          - task: DownloadBuildArtifacts@1
-            inputs:
-              buildType: 'specific'
-              project: 'be8e7b2f-ba9c-45cc-a31c-dde24678c3fe'
-              pipeline: '1'
-              specificBuildWithTriggering: true
-              buildVersionToDownload: 'latest'
-              tags: '$(Build.BuildId)'
-              downloadType: 'single'
-              downloadPath: '$(System.ArtifactsDirectory)'
-              cleanDestinationFolder: true
+        - task: CopyFilesOverSSH@0
+          inputs:
+            sshEndpoint: 'ssh'
+            sourceFolder: '$(Agent.BuildDirectory)'
+            contents: '**'
+            targetFolder: '/var/www/myapp'
+            readyTimeout: '20000'
