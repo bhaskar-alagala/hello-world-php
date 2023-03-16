@@ -63,9 +63,10 @@ stages:
           - task: CopyFilesOverSSH@0
             name: copy
             inputs:
-              sshEndpoint: '20.187.65.253'
+              sshEndpoint: 'bhaski-service-connection'
               sourceFolder: '$(Build.ArtifactStagingDirectory)'
-              contents: '**/*.zip'
+              #contents: '**/*.zip'
               targetFolder: '/var/www/myapp'
               cleanTargetFolder: true
-             
+              failOnEmptySource: true
+              
