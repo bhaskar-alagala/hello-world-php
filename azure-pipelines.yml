@@ -52,7 +52,7 @@ stages:
           inputs:
             sshEndpoint: 'ssh'
             sourceFolder: '$(Agent.BuildDirectory)'
-            contents: '**/*.php'
+            contents: '**/*.php'  # ** means it will copy all data from git to vm server. 
             cleanTargetFolder: true
             targetFolder: '/var/www/myapp'
             readyTimeout: '20000'
