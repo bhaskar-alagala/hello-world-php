@@ -63,7 +63,7 @@ stages:
           - task: CopyFilesOverSSH@0
             name: copy
             inputs:
-              sshEndpoint: 'ssh -o StrictHostKeyChecking=no -i $(sshKey.secureFilePath) azureuser@20.187.65.253'
+              sshEndpoint: '20.187.65.253'
               sourceFolder: '$(Build.ArtifactStagingDirectory)'
               contents: '**/*.zip'
               targetFolder: '/var/www/myapp'
