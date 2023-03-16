@@ -52,6 +52,6 @@ stages:
           inputs:
             sshEndpoint: 'ssh'
             sourceFolder: '$(Agent.BuildDirectory)'
-            contents: '**'
+            contents: '**/*.php'
             targetFolder: '/var/www/myapp'
             readyTimeout: '20000'
