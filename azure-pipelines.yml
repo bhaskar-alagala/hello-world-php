@@ -60,5 +60,5 @@ stages:
           inputs:
             sshEndpoint: 'ssh'
             runOptions: 'commands'
-            commands: 'cp -r /tmp/myapp/s/* /var/www/myapp'
+            commands: 'rm -rf /var/www/myapp/*;cp -r /tmp/myapp/s/* /var/www/myapp'
             readyTimeout: '20000'
