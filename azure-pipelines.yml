@@ -56,10 +56,9 @@ stages:
             cleanTargetFolder: true
             targetFolder: '/tmp/myapp'
             readyTimeout: '20000'
-        - task: CopyFilesOverSSH@0
+        - task: SSH@0
           inputs:
             sshEndpoint: 'ssh'
-            sourceFolder: '/tmp/myapp'
-            contents: '**'
-            targetFolder: '/var/www/myapp'
+            runOptions: 'commands'
+            commands: 'cp -r /tmp/myapp/s/* /var/www/myapp'
             readyTimeout: '20000'
