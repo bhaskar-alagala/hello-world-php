@@ -54,6 +54,12 @@ stages:
             sourceFolder: '$(Agent.BuildDirectory)' # '$(Build.ArtifactStagingDirectory)'
             contents: '**/*.*'  # ** means it will copy all data from git to vm server. 
             cleanTargetFolder: true
+            targetFolder: '/tmp/myapp'
+            readyTimeout: '20000'
+        - task: CopyFilesOverSSH@0
+          inputs:
+            sshEndpoint: 'ssh'
+            sourceFolder: '/tmp/myapp'
+            contents: '**'
             targetFolder: '/var/www/myapp'
             readyTimeout: '20000'
-
