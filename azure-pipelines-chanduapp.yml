@@ -1,0 +1,63 @@
+# PHP
+# Test and package your PHP project.
+# Add steps that run tests, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/php
+
+trigger:
+- chandu
+variables:
+  webAppName: my-php
+  vmImageName: ubuntu-latest
+  environmentName: azure-vm
+  rootFolder: $(System.DefaultWorkingDirectory)
+  TAG: '$(Build.BuildId)'
+  
+stages:
+  - stage: Build
+    displayName: Build stage
+    variables:
+      phpVersion: "7.4"
+    jobs:
+      - job: BuildJob
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - script: >
+              sudo update-alternatives --set php /usr/bin/php$(phpVersion)
+              sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
+              sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
+              sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
+              sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+              php -version
+            workingDirectory: $(rootFolder)
+            displayName: Use PHP version $(phpVersion)
+          - script: composer install --no-interaction --prefer-dist
+            workingDirectory: $(rootFolder)
+            displayName: Composer install
+          - task: ArchiveFiles@2
+            displayName: Archive files
+            inputs:
+              rootFolderOrFile: $(rootFolder)
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+              replaceExistingArchive: true
+          - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+            displayName: Upload package
+            artifact: drop
+      - job: DeployProd
+        steps:
+        - task: CopyFilesOverSSH@0
+          inputs:
+            sshEndpoint: 'ssh'
+            sourceFolder: '$(Agent.BuildDirectory)' # '$(Build.ArtifactStagingDirectory)'
+            contents: '**/*.*'  # ** means it will copy all data from git to vm server. 
+            cleanTargetFolder: true
+            targetFolder: '/tmp/chanduapp'
+            readyTimeout: '20000'
+        - task: SSH@0
+          inputs:
+            sshEndpoint: 'ssh'
+            runOptions: 'commands'
+            commands: 'rm -rf /var/www/chanduapp/*;cp -r /tmp/chanduapp/s/* /var/www/chanduapp'
+            readyTimeout: '20000'
