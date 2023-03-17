@@ -56,8 +56,4 @@ stages:
             cleanTargetFolder: true
             targetFolder: '/var/www/myapp'
             readyTimeout: '20000'
-        - task: CopyFiles@2
-          inputs:
-            SourceFolder: '/var/www/myapp/s'
-            Contents: '**'
-            TargetFolder: '/var/www/myapp'
+
