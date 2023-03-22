@@ -32,7 +32,7 @@ stages:
               php -version
             workingDirectory: $(rootFolder)
             displayName: Use PHP version $(phpVersion)
-          - script: ./phpunit # composer install --no-interaction --prefer-dist
+          - script: composer require --dev phpunit/phpunit  # composer install --no-interaction --prefer-dist
             workingDirectory: $(rootFolder)
             displayName: Composer install
           - task: ArchiveFiles@2
