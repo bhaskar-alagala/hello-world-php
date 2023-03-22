@@ -7,5 +7,4 @@ echo $message;
 echo "Welcome to chandu projects<br>";
 echo "\nWelcome to Bhaskar projects<br>";
 echo "<h1>"This is php information"</h1>\n";
-php phpinfo();
 ?>
