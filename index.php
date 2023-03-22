@@ -6,4 +6,6 @@ $message = "Hello, world!<br>";
 echo $message;
 echo "Welcome to chandu projects<br>";
 echo "\nWelcome to Bhaskar projects<br>";
+<h1>"This is php information"</h1>
+php phpinfo();
 ?>
