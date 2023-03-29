@@ -1,4 +1,7 @@
 ---
+pool:
+  name: Default
+  
 trigger:
   - main
 variables:
