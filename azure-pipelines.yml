@@ -1,3 +1,6 @@
+
+
+---
 pool:
   name: Default
   
@@ -21,15 +24,15 @@ stages:
           vmImage: $(vmImageName)
         steps:
           - script: >
-              sudo update-alternatives --set php /usr/bin/php
+              sudo update-alternatives --set php /usr/bin/php$(phpVersion)
 
-              sudo update-alternatives --set phar /usr/bin/phar
+              sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
 
-              sudo update-alternatives --set phpdbg /usr/bin/phpdbg
+              sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
 
-              sudo update-alternatives --set php-cgi /usr/bin/php-cgi
+              sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
 
-              sudo update-alternatives --set phar.phar /usr/bin/phar.phar
+              sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
 
               php -version
             workingDirectory: $(rootFolder)
@@ -48,3 +51,19 @@ stages:
           - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
             displayName: Upload package
             artifact: drop
+      - job: DeployProd
+        steps:
+        - task: CopyFilesOverSSH@0
+          inputs:
+            sshEndpoint: 'ssh'
+            sourceFolder: '$(Agent.BuildDirectory)' # '$(Build.ArtifactStagingDirectory)'
+            contents: '**/*.*'  # ** means it will copy all data from git to vm server. 
+            cleanTargetFolder: true
+            targetFolder: '/tmp/myapp'
+            readyTimeout: '20000'
+        - task: SSH@0
+          inputs:
+            sshEndpoint: 'ssh'
+            runOptions: 'commands'
+            commands: 'rm -rf /var/www/myapp/*;cp -r /tmp/myapp/s/* /var/www/myapp'
+            readyTimeout: '20000'
