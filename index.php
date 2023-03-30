@@ -1,10 +1,14 @@
-<?php
-// Create a variable and assign a value to it
-$message = "Hello, world!<br>";
+<!DOCTYPE html>
+<html>
+<body>
 
-// Display the value of the variable on the webpage
-echo $message;
-echo "Welcome to chandu projects<br>";
-echo "\nWelcome to Bhaskar projects<br>";
-echo "<h1>"This is php information"</h1>\n";
+<h1>My first PHP page</h1>
+  <h2> Welcome to BHASKAR's website </h2>
+
+<?php
+echo "Hello World! to my website";
+echo "THIS IS SECOND LINE  World! to my website";
 ?>
+
+</body>
+</html>
